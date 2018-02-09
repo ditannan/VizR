@@ -2,8 +2,9 @@
 
 # load packages -----------------------------------------------------------
 
+library("ggplot2")
 library('gcookbook')
-
+library("dplyr")
 
 # simple bar --------------------------------------------------------------
 
@@ -32,7 +33,7 @@ ggplot(cabbage_exp, aes(x = Date, y = Weight, fill = Cultivar)) +
 # 频数条形图 -------------------------------------------------------------------
 
 data("diamonds")
-diamonds %>% dplyr::glimpse()
+diamonds %>% glimpse()
 # 离散型
 ggplot(diamonds, aes(x = cut)) +
   geom_bar() ## equ to: geom_bar(stat = "bin")
@@ -44,12 +45,32 @@ ggplot(diamonds, aes(x = carat)) + ## geom_histogram(binwidth = 0.2)
 
 # 条形图着色 -------------------------------------------------------------------
 
+data("uspopchange")
+uspopchange %>% glimpse()
+# 人口增长最快的十个州
+upc <- uspopchange %>% 
+  filter(rank(Change) > 40)
+# 州分布
+upc$Region %>% table
+# 州映射为颜色
+upc %>% ggplot(aes(x = reorder(Abb, Change), y = Change, fill = Region)) +
+  geom_bar(stat = 'identity', colour = 'black') +
+  scale_fill_manual(values = c('#669933', '#FFCC66')) +
+  xlab('State')
 
 
+# 正负条形图分别着色 ---------------------------------------------------------------
 
-
-
-
+data("climate")
+csub <- climate %>% 
+  filter(Source == 'Berkeley' & Year >= 1900)
+csub$pos <- csub$Anomaly10y >= 0
+# 将pos映射为颜色
+csub %>% ggplot(aes(Year, Anomaly10y, fill = pos)) +
+  geom_bar(stat = 'identity', position = 'identity', colour = 'black', size = 0.15) +
+  scale_fill_manual(values = c('#CCEEFF', '#FFDDDD'), guide = F)
+  
+  
 
 
 
