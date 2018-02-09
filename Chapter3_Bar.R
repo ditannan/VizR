@@ -146,8 +146,35 @@ ce1 %>%
   geom_text(aes(y = label_y, label = paste0(format(Weight, nsmall = 2), 'kg')), size = 4) +
   scale_fill_brewer(palette = 'Pastel1')
   
-  
-  
+
+# Cleveland scatter plot --------------------------------------------------
+
+tophitters2001 %>% str()  
+# 前25行
+tophit <- tophitters2001 %>% 
+  filter(row_number() <= 25)
+# 点图
+tophit %>% 
+  ggplot(aes(avg, name)) +
+  geom_point()
+# 排序
+tophit %>% 
+  ggplot(aes(avg, reorder(name, avg))) +
+  geom_point(size = 3) +
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_line(colour = 'grey60', linetype = 'dashed'))
+# 坐标轴互换
+tophit %>% 
+  ggplot(aes(reorder(name, avg), avg)) +
+  geom_point(size = 3) +
+  theme_bw() +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.text.x = element_text(angle = 60, hjust = 1),
+        panel.grid.major.x = element_line(colour = 'grey60', linetype = 'dashed')) +
+  xlab('Name')
   
   
   
