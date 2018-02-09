@@ -95,8 +95,12 @@ cabbage_exp %>% ggplot(aes(Date, Weight, fill = Cultivar, order = plyr::desc(Cul
   scale_fill_brewer(palette = 'Pastel1')
 
 
+# 百分比堆积条形图 ----------------------------------------------------------------
 
-
+library("plyr")
+ce <- cabbage_exp %>% ddply("Date", transform, percent_weight = Weight / sum(Weight) * 100)
+ce %>% ggplot(aes(Date, percent_weight, fill = Cultivar)) +
+  geom_bar(stat = 'identity')
 
 
 
