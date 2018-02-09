@@ -103,8 +103,57 @@ ce %>% ggplot(aes(Date, percent_weight, fill = Cultivar)) +
   geom_bar(stat = 'identity')
 
 
+# Add text label ----------------------------------------------------------
 
+p <- cabbage_exp %>% 
+  ggplot(aes(interaction(Date, Cultivar), Weight)) +
+  geom_bar(stat = 'identity')
+# add text label under the upper line
+p + geom_text(aes(label = Weight), vjust = 1.5, colour = 'white')
+# above the upper line and set the range of y axis
+p + geom_text(aes(label = Weight), vjust = -0.5) +
+  ylim(0, max(cabbage_exp$Weight) * 1.05)
+# Or
+p + geom_text(aes(y = Weight + 0.1, label = Weight))
 
+# cluster bar
+p1 <- cabbage_exp %>% 
+  ggplot(aes(Date, Weight, fill = Cultivar)) +
+  geom_bar(stat = 'identity', position = 'dodge')
+p1 + geom_text(aes(label = cabbage_exp$Weight), vjust = 1.5, position = position_dodge(.9), size = 3)
+
+# 堆积挑图数据标签
+# 排序再分组顶端
+ce <- cabbage_exp %>% 
+  arrange(Date, desc(Cultivar)) %>% 
+  ddply("Date", transform, label_y = cumsum(Weight))
+ce %>% 
+  ggplot(aes(Date, Weight, fill = Cultivar)) +
+  geom_bar(stat = 'identity') +
+  geom_text(aes(y = label_y, label = Weight), vjust = 1.25, colour = 'white')
+# 中间
+ce1 <- cabbage_exp %>% 
+  arrange(Date, desc(Cultivar)) %>% 
+  ddply("Date", transform, label_y = cumsum(Weight) - 0.5 * Weight)
+ce1 %>% 
+  ggplot(aes(Date, Weight, fill = Cultivar)) +
+  geom_bar(stat = 'identity') +
+  geom_text(aes(y = label_y, label = Weight), colour = 'white')
+# final version
+ce1 %>% 
+  ggplot(aes(Date, Weight, fill = Cultivar)) +
+  geom_bar(stat = 'identity', colour = 'black') +
+  geom_text(aes(y = label_y, label = paste0(format(Weight, nsmall = 2), 'kg')), size = 4) +
+  scale_fill_brewer(palette = 'Pastel1')
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 
 
