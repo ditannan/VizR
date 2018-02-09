@@ -70,13 +70,29 @@ csub %>% ggplot(aes(Year, Anomaly10y, fill = pos)) +
   geom_bar(stat = 'identity', position = 'identity', colour = 'black', size = 0.15) +
   scale_fill_manual(values = c('#CCEEFF', '#FFDDDD'), guide = F)
   
-  
+
+# 调整条形宽度和间距 ---------------------------------------------------------------
+
+# 宽度default: geom_bar(width = 0.9), max = 1
+pg_mean %>% View()
+pg_mean %>% 
+  ggplot(aes(group, weight)) +
+  geom_bar(stat = 'identity', width = 0.9)
+
+# 间距
+cabbage_exp %>% ggplot(aes(Date, Weight, fill = Cultivar)) +
+  geom_bar(stat = 'identity', position = 'dodge', width = 0.5)
+cabbage_exp %>% ggplot(aes(Date, Weight, fill = Cultivar)) +
+  geom_bar(stat = 'identity', position = position_dodge(0.7), width = 0.5)
 
 
 
+# 堆积条形图上下颠倒 ---------------------------------------------------------------
 
-
-
+cabbage_exp %>% ggplot(aes(Date, Weight, fill = Cultivar, order = plyr::desc(Cultivar))) +
+  geom_bar(stat = 'identity') +
+#  guides(fill = guide_legend(reverse = T)) +
+  scale_fill_brewer(palette = 'Pastel1')
 
 
 
