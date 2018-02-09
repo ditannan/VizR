@@ -175,24 +175,26 @@ tophit %>%
         axis.text.x = element_text(angle = 60, hjust = 1),
         panel.grid.major.x = element_line(colour = 'grey60', linetype = 'dashed')) +
   xlab('Name')
-  
-  
-  
-  
-  
-  
 
+# 对两个水平进行排序
+nameorder <- tophit$name[order(tophit$lg, tophit$avg)]
+tophit$name <- factor(tophit$name, levels = nameorder)  
+tophit %>% 
+  ggplot(aes(avg, name)) +
+  geom_segment(aes(yend = name), xend = 0, colour = 'grey50') +
+  geom_point(size = 3, aes(colour = lg)) +
+  scale_color_brewer(palette = 'Set1', limits = c('NL', 'AL')) +
+  theme_bw() + 
+  theme(panel.grid.major.y = element_blank(),  # 删除水平网线
+        legend.position = c(1, 0.55),
+        legend.justification = c(1, 0.5))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 分面图
+tophit %>% 
+  ggplot(aes(avg, name)) +
+  geom_segment(aes(yend = name), xend = 0, colour = 'grey50') +
+  geom_point(aes(colour = lg), size = 3) +  
+  scale_color_brewer(palette = 'Set1', limits = c('NL', 'AL'), guide = FALSE) +
+  theme_bw() +
+  theme(panel.grid.major.y = element_blank()) +
+  facet_grid(lg ~ ., scales = 'free_y', space = 'free_y')
