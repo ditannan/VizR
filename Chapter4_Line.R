@@ -114,39 +114,39 @@ sunspotyear %>%
   geom_area(fill = 'blue', alpha = 0.2) +
   geom_line()
 
+# 堆积面积图 -------------------------------------------------------------------
 
-  
-  
-  
+uspopage %>% 
+  ggplot(aes(Year, Thousands, fill = AgeGroup, order = desc(AgeGroup))) + 
+  geom_area(colour = 'black', size = 0.2, alpha = 0.4) +
+  scale_fill_brewer(palette = 'Blues', breaks = rev(levels(uspopage$AgeGroup)))
+uspopage %>% 
+  ggplot(aes(Year, Thousands, fill = AgeGroup, order = desc(AgeGroup))) +
+  geom_area(colour = NA, alpha = .4) +
+  scale_fill_brewer(palette = 'Blues') +
+  geom_line(position = 'stack', size = .2)
 
-  
-  
-  
-  
-  
-  
-  
+# 百分堆积图 -------------------------------------------------------------------
 
+uspopage_prop <- uspopage %>% 
+  ddply('Year', mutate, Percent = Thousands / sum(Thousands) * 100)
+uspopage_prop %>% 
+  ggplot(aes(Year, Percent, fill = AgeGroup, order = desc(AgeGroup))) +
+  geom_area(colour = 'black', size = .2, alpha = .4) +
+  scale_fill_brewer(palette = 'Blues')
 
+# 添加置信阈 -------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+clim <- climate %>% 
+  filter(Source == 'Berkeley') %>% 
+  select(Year, Anomaly10y, Unc10y)
+clim %>%
+  ggplot(aes(Year, Anomaly10y)) +
+  geom_ribbon(aes(ymin = Anomaly10y - Unc10y, ymax = Anomaly10y + Unc10y), alpha = .2) +
+  geom_line()
+# 虚线表示置信阈
+clim %>% 
+  ggplot(aes(Year, Anomaly10y)) +
+  geom_line(aes(y = Anomaly10y - Unc10y), colour = 'grey50', linetype = 'dotted') +
+  geom_line(aes(y = Anomaly10y + Unc10y), colour = 'grey50', linetype = 'dashed') +
+  geom_line()
