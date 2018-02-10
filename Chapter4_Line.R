@@ -88,6 +88,15 @@ tg %>%
   geom_line(colour = 'darkgreen', size = 1.5) +
   geom_point(size = 4, shape = 22, fill = 'white')
 
+# 修改数据标记样式 ----------------------------------------------------------------
+
+tg %>% 
+  ggplot(aes(dose, length, fill = supp)) +
+  geom_line(position = position_dodge(0.2)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(0.2)) +
+  # scale_fill_brewer(palette = 'Set1') +
+  scale_fill_manual(values = c('white', 'black'))
+
 
 
 
