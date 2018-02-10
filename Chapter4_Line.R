@@ -3,6 +3,9 @@
 
 library('gcookbook')
 library('ggplot2')
+library('tidyverse')
+library('magrittr')
+
 # Simple line -------------------------------------------------------------
 
 data('BOD')
@@ -96,6 +99,34 @@ tg %>%
   geom_point(shape = 21, size = 3, position = position_dodge(0.2)) +
   # scale_fill_brewer(palette = 'Set1') +
   scale_fill_manual(values = c('white', 'black'))
+
+# plot area graph ---------------------------------------------------------
+
+sunspotyear <- data.frame(
+  Year = as.numeric(time(sunspot.year)),
+  Sunspots = as.numeric(sunspot.year)
+)
+sunspotyear %>%
+  ggplot(aes(Year, Sunspots)) +
+  geom_area(colour = 'black', fill = 'blue', alpha = 0.2)
+sunspotyear %>% 
+  ggplot(aes(Year, Sunspots)) +
+  geom_area(fill = 'blue', alpha = 0.2) +
+  geom_line()
+
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+
 
 
 
