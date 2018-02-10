@@ -73,6 +73,27 @@ tg %>%
   geom_line(position = position_dodge(0.2)) +
   geom_point(position = position_dodge(0.2), size = 4)
 
+# Line tpye ---------------------------------------------------------------
+
+BOD %>% 
+  ggplot(aes(Time, demand)) +
+  geom_line(linetype = 'dashed', size = 1, colour = 'blue')
+tg %>% 
+  ggplot(aes(dose, length, colour = supp)) +
+  geom_line() +
+  scale_color_brewer(palette = 'Set1')
+# add group variable
+tg %>% 
+  ggplot(aes(dose, length, group = supp)) +
+  geom_line(colour = 'darkgreen', size = 1.5) +
+  geom_point(size = 4, shape = 22, fill = 'white')
+
+
+
+
+
+
+
 
 
 
