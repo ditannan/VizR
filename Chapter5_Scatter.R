@@ -156,6 +156,50 @@ heightweight %>%
   facet_grid(. ~ sex) +
   geom_line(data = predvals)
 
+# add r-square ------------------------------------------------------------
+
+model <- heightweight %>% 
+  lm(heightIn ~ ageYear, .)
+pred <- predictvals(model, 'ageYear', 'heightIn')
+sp <- heightweight %>% 
+  ggplot(aes(ageYear, heightIn)) +
+  geom_point() +
+  geom_line(data = pred)
+sp + annotate('text', label = 'r^2 == 0.42', parse = TRUE, x = 16.5, y = 52)
+
+eqn <- as.character(as.expression(
+  substitute(italic(y) == a + b * italic(x) * ',' ~~ italic(r)^2 ~ '=' ~ r2,
+             list(a = format(coef(model)[1], digits = 3),
+                  b = format(coef(model)[2], digits = 3),
+                  r2 = format(summary(model)$r.square, digits = 2)
+                  )
+             )
+))
+parse(text = eqn)
+sp + annotate('text', label = eqn, parse = TRUE, x = Inf, y = -Inf, 
+              hjust = 1.1, vjust = -.5)
+
+# add labels to scatter plot ----------------------------------------------
+
+ctries <- countries %>% 
+  filter(Year == 2009 & healthexp > 2000)
+ct <- ctries %>% 
+  ggplot(aes(healthexp, infmortality)) +
+  geom_point()
+ct + annotate('text', x = 4350, y = 5.4, label = 'Canada') +
+  annotate('text', x = 7400, y = 6.8, label = 'USA')
+ct + geom_text(aes(y = infmortality + 0.1, label = Name), size = 3, vjust = 0)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
