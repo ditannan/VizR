@@ -152,9 +152,9 @@ models <- dlply(heightweight, 'sex', .fun = make_model)
 predvals <- ldply(models, .fun = predictvals, xvar = 'ageYear', yvar = 'heightIn')
 heightweight %>% 
   ggplot(aes(ageYear, heightIn, colour = sex)) +
-  geom_point() +
+  geom_point() + 
+  facet_grid(. ~ sex) +
   geom_line(data = predvals)
-
 
 
 
