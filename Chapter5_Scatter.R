@@ -95,10 +95,65 @@ sps <- heightweight %>%
 sps + stat_smooth()
 sps + stat_smooth(method = lm, se = FALSE, fullrange = TRUE)
 
+# add smooth line to a existed scatter plot -------------------------------
+
+model <- heightweight %>% 
+  lm(heightIn ~ ageYear + I(ageYear^2), .)
+
+rng <- range(heightweight$ageYear, na.rm = TRUE)
+predicted <- data.frame(ageYear = seq(rng[1], rng[2], length.out = 100))
+predicted$heightIn <- predict(model, predicted)
+predicted %>% glimpse()
+sp <- heightweight %>% 
+  ggplot(aes(ageYear, heightIn)) +
+  geom_point(colour = 'grey50')
+sp + geom_line(data = predicted, size = 1) +
+  stat_smooth(method = lm, se = FALSE, colour = 'red')
+
+# 切割数据集并拟合
+## 生成预测数据集函数
+predictvals <- function(mdl, xvar, yvar, xrange = NULL, samples = 100, ...) {
+  if (is.null(xrange)) {
+    if (any(class(mdl) %in% c('lm', 'glm')))
+      xrng <- range(mdl$model[[xvar]])
+    else if (any(class(mdl) %in% 'loess'))
+      xrng <- range(mdl$x)
+  }
+  newdata <- data.frame(x = seq(xrng[1], xrng[2], length.out = samples))
+  names(newdata) <- xvar
+  newdata[[yvar]] <- predict(mdl, newdata = newdata, ...)
+  newdata
+}
+# lm() loess()
+modlinear <- lm(heightIn ~ ageYear, data = heightweight)
+modloess <- loess(heightIn ~ ageYear, data = heightweight)
+lm_predicted <- predictvals(modlinear, 'ageYear', 'heightIn')
+loess_predicted <- predictvals(modloess, 'ageYear', 'heightIn')
+
+sp + geom_line(data = lm_predicted, colour = 'red', size = .8) +
+   geom_line(data = loess_predicted, colour = 'blue', size = .8)
+fitlogistic <- glm(classn ~ V1, data = b, family = binomial)
+glm_predicted <- predictvals(fitlogistic, 'V1', 'classn', type = 'response')
+
+b %>% 
+  ggplot(aes(V1, classn)) +
+  geom_point(position = position_jitter(width = .3, height = .08), 
+             alpha = .4, shape = 21, size = 1.5) +
+  geom_line(data = glm_predicted, colour = '#1177FF', size = 1)
 
 
+# add model-fit-lines -----------------------------------------------------
 
-
+make_model <- function(data) {
+  lm(heightIn ~ ageYear, data)
+}
+library(plyr)
+models <- dlply(heightweight, 'sex', .fun = make_model)
+predvals <- ldply(models, .fun = predictvals, xvar = 'ageYear', yvar = 'heightIn')
+heightweight %>% 
+  ggplot(aes(ageYear, heightIn, colour = sex)) +
+  geom_point() +
+  geom_line(data = predvals)
 
 
 
