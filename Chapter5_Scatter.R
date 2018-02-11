@@ -190,11 +190,25 @@ ct + annotate('text', x = 4350, y = 5.4, label = 'Canada') +
   annotate('text', x = 7400, y = 6.8, label = 'USA')
 ct + geom_text(aes(y = infmortality + 0.1, label = Name), size = 3, vjust = 0)
 
+# 气泡图 ---------------------------------------------------------------------
 
+cdat <- countries %>% 
+  filter(Year == 2009 & Name %in% c('Canada', 'Ireland', 'United Kingdom', 
+                                    'United States', 'New Zealand', 'Iceland',
+                                    'Japan', 'Luxembourg', 'Netherlands', 'Switzerland'))
+p <- cdat %>% 
+  ggplot(aes(healthexp, infmortality, size = GDP)) +  ## 映射给直径
+  geom_point(shape = 21, colour = 'black', fill = 'cornsilk')
+p + scale_size_area(max_size = 15) ## map to area
 
-
-
-
+hec <- HairEyeColor[, , 'Male'] + HairEyeColor[, , 'Female']
+hec1 <- reshape2::melt(hec, value.name = 'count')
+hec1 %>% 
+  ggplot(aes(Eye, Hair)) +
+  geom_point(aes(size = count), shape = 21, colour = 'black', fill = 'cornsilk') +
+  scale_size_area(max_size = 20, guide = FALSE) +
+  geom_text(aes(y = as.numeric(Hair) - sqrt(count) / 22, label = count), 
+            vjust = 1, colour = 'grey60', size = 4)
 
 
 
