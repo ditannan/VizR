@@ -210,8 +210,12 @@ hec1 %>%
   geom_text(aes(y = as.numeric(Hair) - sqrt(count) / 22, label = count), 
             vjust = 1, colour = 'grey60', size = 4)
 
+# scatter-matrix plot -----------------------------------------------------
 
-
+c2009 <- countries %>% 
+  filter(Year == 2009) %>% 
+  select(Name, GDP, laborrate, healthexp, infmortality)
+pairs(c2009[, 2 : 5])
 
 
 
