@@ -66,7 +66,24 @@ faithful %>%
   geom_density() +
   xlim(35, 105)
 
+# 分组密度曲线 ------------------------------------------------------------------
 
+birwt %>% 
+  ggplot(aes(x = bwt, colour = smoke0)) +
+  geom_density()
+birwt %>% 
+  ggplot(aes(bwt, fill = smoke0)) +
+  geom_density(alpha = .3, colour = NA) +
+  geom_line(stat = 'density')
+birwt %>% 
+  ggplot(aes(bwt)) +
+  geom_density() +
+  facet_grid(smoke0 ~ .)
+birwt %>% 
+  ggplot(aes(x = bwt, y = ..density..)) +
+  geom_histogram(fill = 'white', colour = 'black') +
+  geom_density() +
+  facet_grid(smoke0 ~ .)
 
 
 
