@@ -32,3 +32,45 @@ bt + facet_grid(race ~ ., scales = 'free') ## 单独y轴标签
 birwt %>% 
   ggplot(aes(x = bwt, fill = smoke0)) +
   geom_histogram(position = 'identity', alpha = 0.4)
+
+# density curve -----------------------------------------------------------
+
+faithful %>% 
+  ggplot(aes(x = waiting)) +
+  geom_density()
+faithful %>% 
+  ggplot(aes(x = waiting)) +
+  geom_line(stat = 'density') +
+  expand_limits(y = 0)
+
+w <- faithful$waiting
+ggplot(NULL, aes(x = w)) + geom_density()
+# adjust the width of curve
+faithful %>% 
+  ggplot(aes(x = waiting)) +
+  geom_line(stat = 'density', adjust = .25, colour = 'red') +
+  geom_line(stat = 'density') +
+  geom_line(stat = 'density', adjust = 2, colour = 'blue')
+faithful %>% 
+  ggplot(aes(x = waiting)) +
+  geom_density(fill = 'blue', alpha = .2) +
+  xlim(45, 105)
+faithful %>% 
+  ggplot(aes(x = waiting)) +
+  geom_density(fill = 'blue', colour = NA, alpha = .2) +
+  geom_line(stat = 'density') +
+  xlim(45, 105)
+faithful %>% 
+  ggplot(aes(x = waiting, y = ..density..)) +
+  geom_histogram(fill = 'cornsilk', colour = 'grey60', size = .2) +
+  geom_density() +
+  xlim(35, 105)
+
+
+
+
+
+
+
+
+
