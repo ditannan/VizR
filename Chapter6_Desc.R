@@ -4,6 +4,7 @@
 library('magrittr')
 library('ggplot2')
 library('tidyverse')
+library('gcookbook')
 
 # plot histogram ----------------------------------------------------------
 
@@ -84,6 +85,53 @@ birwt %>%
   geom_histogram(fill = 'white', colour = 'black') +
   geom_density() +
   facet_grid(smoke0 ~ .)
+
+# 频数多边形 -------------------------------------------------------------------
+
+faithful %>% 
+  ggplot(aes(waiting)) +
+  geom_freqpoly()
+binsize <- range(faithful$waiting) %>% diff()/15
+faithful %>% 
+  ggplot(aes(waiting)) +
+  geom_freqpoly(binwidth = binsize)
+
+# 基本箱线图 -------------------------------------------------------------------
+
+birwt %>% 
+  ggplot(aes(factor(race), bwt)) +
+  geom_boxplot(width = .5, outlier.colour = 'red', outlier.size = 1.5, outlier.shape = 21)
+# single boxplot
+birwt %>% 
+  ggplot(aes(1, bwt)) +
+  geom_boxplot() +
+  scale_x_continuous(breaks = NULL) +
+  theme(axis.title.x = element_blank())
+# add notch
+birwt %>% 
+  ggplot(aes(factor(race), bwt)) +
+  geom_boxplot(notch = TRUE)
+# add mean
+birwt %>% 
+  ggplot(aes(factor(race), bwt)) +
+  geom_boxplot() +
+  stat_summary(fun.y = 'mean', geom = 'point', shape = 23, fill = 'white')
+# 小提琴图
+p <- heightweight %>% ggplot(aes(sex, heightIn))
+p + geom_violin()
+p + geom_violin() + 
+  geom_boxplot(width = .1, fill = 'black', outlier.colour = NA) +
+  stat_summary(fun.y = median, geom = 'point', fill = 'white', shape = 21, size = 2.5)
+p + geom_violin(trim = FALSE) ## 保留尾部
+# 图面积和每组数据值数目成正比
+p + geom_violin(scale = 'count')
+p + geom_violin(adjust = 2)
+p + geom_violin(adjust = .5)
+  
+
+
+
+
 
 
 
