@@ -60,4 +60,21 @@ p + annotate('segment', x = 1850, xend = 1820, y = -.8, yend = -.95,
 
 # 添加矩形阴影 ------------------------------------------------------------------
 
+# annotate('rect')
+p <- ggplot(subset(climate, Source == 'Berkeley'), aes(Year, Anomaly10y)) +
+  geom_line()
+p + annotate('rect', xmin = 1950, xmax = 1980, ymin = -1, ymax = 1, alpha = .2, fill = 'blue')
 
+# hightlight some elements ------------------------------------------------
+
+pg <- PlantGrowth
+pg$hl <- pg %$% ifelse(group == 'trt2', 'yes', 'no')
+pg %>% 
+  ggplot(aes(group, weight, fill = hl)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c('grey85', '#FFDDCC'), guide = FALSE)
+# equivalent to
+pg %>% 
+  ggplot(aes(group, weight, fill = group)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c('grey85', 'grey85', '#FFDDCC'), guide = FALSE)
