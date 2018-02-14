@@ -45,3 +45,19 @@ hw_means <- heightweight %>%
 hw_means
 p + geom_hline(aes(yintercept = heightIn, colour = sex), 
                data = hw_means, linetype = 'dashed', size = 1)
+
+# add segment or arrow ---------------------------------------------------------------
+
+p <- ggplot(subset(climate, Source == 'Berkeley'), aes(Year, Anomaly10y)) +
+  geom_line()
+p + annotate('segment', x = 1950, xend = 1980, y = -.25, yend = -.25)
+library('grid')
+p + annotate('segment', x = 1850, xend = 1820, y = -.8, yend = -.95, 
+             colour = 'blue', size = 2, arrow = arrow()) +
+  annotate('segment', x = 1950, xend = 1980, y = -.25, yend = -.25, 
+           arrow = arrow(ends = 'both', angle = 90, length = unit(.2, 'cm')))
+# ?arrow
+
+# 添加矩形阴影 ------------------------------------------------------------------
+
+
