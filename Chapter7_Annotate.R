@@ -31,4 +31,17 @@ p + annotate('text', x = 0, y = 0.05, parse = TRUE, label = "'Function:' * y == 
 
 # add line ----------------------------------------------------------------
 
+p <- heightweight %>% 
+  ggplot(aes(x = ageYear, y = heightIn, colour = sex)) +
+  geom_point()
+# add horizontal line and vertical line 
+p + geom_hline(yintercept = 60) +
+  geom_vline(xintercept = 14, alpha = .5)
+p + geom_abline(intercept = 37.4, slope = 1.75)
 
+library('plyr')
+hw_means <- heightweight %>% 
+  ddply('sex', summarise, heightIn = mean(heightIn))
+hw_means
+p + geom_hline(aes(yintercept = heightIn, colour = sex), 
+               data = hw_means, linetype = 'dashed', size = 1)
