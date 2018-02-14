@@ -78,3 +78,32 @@ pg %>%
   ggplot(aes(group, weight, fill = group)) +
   geom_boxplot() +
   scale_fill_manual(values = c('grey85', 'grey85', '#FFDDCC'), guide = FALSE)
+
+# add errorbar ------------------------------------------------------------
+
+ce <- cabbage_exp %>% subset(Cultivar == 'c39')
+# add error bar for bar
+ce %>% 
+  ggplot(aes(Date, Weight)) +
+  geom_bar(fill = 'white', colour = 'black', stat = 'identity') +
+  geom_errorbar(aes(ymin = Weight - se, ymax = Weight + se), width = .2)
+# add erroe or line
+ce %>% 
+  ggplot(aes(Date, Weight)) +
+  geom_line(aes(group = 1)) +
+  geom_point(size = 4) +
+  geom_errorbar(aes(ymin = Weight - se, ymax = Weight + se), width = .2)
+# multiple bar chart
+cabbage_exp %>% 
+  ggplot(aes(Date, Weight, fill = Cultivar)) +
+  geom_bar(stat = 'identity', position = 'dodge') +
+  geom_errorbar(aes(ymin = Weight - se, ymax = Weight + se), 
+                position = position_dodge(.9), width = .2)
+
+pd <- position_dodge(.3)
+cabbage_exp %>% 
+  ggplot(aes(Date, Weight, colour = Cultivar, group = Cultivar)) +
+  geom_errorbar(aes(ymin = Weight -se, ymax = Weight + se), width = .2, position = pd, colour = 'black') +
+  geom_line(position = pd) +
+  geom_point(position = pd, size = 2.5)
+cabbage_exp
