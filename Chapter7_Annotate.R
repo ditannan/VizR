@@ -107,3 +107,34 @@ cabbage_exp %>%
   geom_line(position = pd) +
   geom_point(position = pd, size = 2.5)
 cabbage_exp
+
+# add annotate to facet plot ----------------------------------------------
+
+p <- mpg %>% 
+  ggplot(aes(displ, hwy)) +
+  geom_point() +
+  facet_grid(. ~ drv)
+f_labels <- data.frame(drv = c('4', 'f', 'r'),
+                       label = c('4wd', 'Front', 'Rear'))
+p + geom_text(x = 6, y = 40, aes(label = label), data = f_labels)  
+p + annotate('text', x = 6, y = 40, label = 'Label text')
+
+# add mathmatical expression and r^2 to facet plot
+lm_labels <- function(dat) {
+  mod <- lm(hwy ~ displ, data = dat)
+  formula <- sprintf('italic(y) == %.2f %+.2f * italic(x)',
+                     round(coef(mod)[1], 2), round(coef(mod)[2], 2))
+  r <- cor(dat$displ, dat$hwy)
+  r2 <- sprintf('italic(R^2) == %.2f', r^2)
+  data.frame(formula = formula, r2 = r2, stringsAsFactors = FALSE)
+}
+labels <- ddply(mpg, 'drv', lm_labels)
+labels
+p + geom_smooth(method = lm, se = FALSE) +
+  geom_text(x = 3, y = 40, aes(label = formula), data = labels, parse = TRUE, hjust = 0) +
+  geom_text(x = 3, y = 35, aes(label = r2), data = labels, parse = TRUE, hjust = 0)
+# add r2 equivalent to
+labels1 <- ddply(mpg, 'drv', summarise, r2 = cor(displ, hwy)^2)
+labels1$r2 <- sprintf('italic(R^2) == %.2f', labels1$r2)
+p + geom_smooth(method = lm, se = FALSE) +
+  geom_text(aes(label = r2), data = labels1, x = 5, y = 35, parse = TRUE, size = 3)
