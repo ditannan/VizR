@@ -99,3 +99,18 @@ hwp + scale_y_continuous(breaks = c(50, 56, 60, 66, 72),
                          labels = c('Tiny', 'Really\nshort', 'Short', 'Medium', 'Tallish'))
 # 修改数据标签格式
 hwp + scale_y_continuous(labels = scales::dollar)
+
+# 修改刻度标签外观 ----------------------------------------------------------------
+
+bp <- PlantGrowth %>% 
+  ggplot(aes(group, weight)) +
+  geom_boxplot() +
+  scale_x_discrete(breaks = c('ctrl', 'trt1', 'trt2'),
+                   labels = c('Control group', 'Treatment group 1', 'Treatment group 2'))
+# 将文本逆时针旋转90°
+bp + theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = .5))
+# 旋转30°
+bp + theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+# 修改字体样式
+bp + theme(axis.text.x = element_text(family = 'Times', face = 'italic', colour = 'darkred', size = rel(0.9)))
+  
