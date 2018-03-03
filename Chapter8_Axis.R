@@ -145,3 +145,7 @@ hwp + theme_bw() + theme(panel.border = element_blank(), axis.line = element_lin
 hwp + theme(axis.line = element_line(size = 4))
 # 添加参数lineend
 hwp + theme(axis.line = element_line(size = 4, lineend = 'square'))
+
+# 使用对数坐标轴 -----------------------------------------------------------------
+
+
