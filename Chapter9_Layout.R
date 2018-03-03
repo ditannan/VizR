@@ -26,3 +26,13 @@ p + ggtitle('Age and height of school children') +
 # 几何对象则直接设置其文本属性
 p + annotate('text', x = 15, y = 53, label = 'Some text', size = 7, colour = 'darkred', fontface = 'bold.italic')
 p + geom_text(aes(label = weightLb), size = 3, colour = 'red')
+
+# 使用主题 --------------------------------------------------------------------
+
+# 灰色主题
+p + theme_grey()
+p + theme_bw()
+
+# 修改主题外观 ------------------------------------------------------------------
+
+
