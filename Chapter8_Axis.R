@@ -113,4 +113,35 @@ bp + theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = .5))
 bp + theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
 # 修改字体样式
 bp + theme(axis.text.x = element_text(family = 'Times', face = 'italic', colour = 'darkred', size = rel(0.9)))
-  
+
+# 修改坐标轴标签文本 ---------------------------------------------------------------
+
+hwp <- heightweight %>% 
+  ggplot(aes(ageYear, heightIn, colour = sex)) +
+  geom_point()
+hwp + xlab('Age in year') + ylab('Height in inches')
+# Or
+hwp + labs(x = 'Age in year', y = 'Height in inches')
+hwp + scale_x_continuous(name = 'Age\n(year)')
+
+# 移除坐标轴标签 -----------------------------------------------------------------
+
+hwp + theme(axis.title.x = element_blank())
+# Or
+hwp + xlab('')
+
+# 修改坐标轴标签外观 ---------------------------------------------------------------
+
+hwp + theme(axis.title.x = element_text(face = 'italic', colour = 'darkred', size = 14))
+# y轴标签旋转角度
+hwp + theme(axis.title.y = element_text(angle = 0, face = 'italic', colour = 'darkred', vjust = .5))
+
+# 显示坐标轴实线 -----------------------------------------------------------------
+
+hwp + theme(axis.line = element_line(color = 'black'))
+# 如果主题本身有实线，要先去掉
+hwp + theme_bw() + theme(panel.border = element_blank(), axis.line = element_line(colour = 'black'))
+# 粗线条未完全重叠
+hwp + theme(axis.line = element_line(size = 4))
+# 添加参数lineend
+hwp + theme(axis.line = element_line(size = 4, lineend = 'square'))
