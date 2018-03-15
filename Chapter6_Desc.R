@@ -27,7 +27,7 @@ bt
 bt + facet_grid(smoke ~ .)
 
 birwt$smoke0 <- if_else(birwt$smoke == 0, 'No smoke', 'Smoke')
-bt + facet_grid(smoke0 ~ .)
+bt + facet_grid(smoke ~ .)
 bt + facet_grid(race ~ ., scales = 'free') ## 单独y轴标签
 
 birwt %>% 
@@ -100,7 +100,11 @@ faithful %>%
 
 birwt %>% 
   ggplot(aes(factor(race), bwt)) +
-  geom_boxplot(width = .5, outlier.colour = 'red', outlier.size = 1.5, outlier.shape = 21)
+  stat_boxplot(geom='errorbar', linetype=1, width=0.5) + ## 添加触须
+  geom_boxplot(width = .5, outlier.colour = 'red', 
+               outlier.size = 1.5, outlier.shape = 21)
+  
+
 # single boxplot
 birwt %>% 
   ggplot(aes(1, bwt)) +
