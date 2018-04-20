@@ -1,0 +1,37 @@
+---
+title: "Chapter 1"
+author: "xzm"
+date: "2018年4月20日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '#>')
+```
+
+# par()函数
+## bty参数
+```{r}
+bty <- c('o', 'l', '7', 'u', 'c', ']')
+par(mfrow = c(3, 2))
+
+for (i in seq_along(bty)){
+  par(bty = bty[i])
+  plot(1 : 5, main = paste0('The bty is: ', bty[i]))
+}
+```
+
+## cex, col
+cex设置图上的元素，比如文字或符号的缩放倍数，默认值为1，衍生出cex.lab, cex.main, cex.sub, cex.axis;
+col设置颜色，衍生出col.lab, col.main, col.sub, col.axis;
+```{r}
+plot(1 : 5, cex = 1 : 5, cex.lab = 1.5, col.lab = 'red', col.axis = 'blue', col = 'pink')
+```
+
+## family
+设置字体，默认有'serif', 'sans', 'mono', 'symbol'; 其中'serif'指的是医学期刊中的times newroman;
+```{r}
+par(family = 'serif')
+plot(1 : 5, main = 'I love R')
+```
+
