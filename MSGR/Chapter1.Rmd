@@ -7,6 +7,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = '#>')
+
+Sys.setlocale('LC_ALL','C') 
 ```
 
 # par()函数
@@ -34,4 +36,55 @@ plot(1 : 5, cex = 1 : 5, cex.lab = 1.5, col.lab = 'red', col.axis = 'blue', col 
 par(family = 'serif')
 plot(1 : 5, main = 'I love R')
 ```
+
+## lty
+线条样式，取值0到6，分别表示：不划线，实线，虚线，点线，点划线，长划线，点长划线；
+```{r}
+par(mfrow = c(2, 3))
+for(i in seq_along(seq(1, 6))){
+  par(lty = i, lwd = i)
+  plot(1 : 5, type = 'l', main = paste0('the lty is : ', i))
+  
+}
+plot(rnorm(50), type = 'l', lwd = 2, main = '图中线条宽度为默认值的2倍')
+```
+
+
+## pch
+点形状
+```{r}
+plot(rep(1 : 5, times = 5), rep(1 : 5, each = 5), pch = 1 : 25, cex = 1.5, bty = 'l', xlim = c(1, 5.4), xlab = '', ylab = '', main = '25种不同点形')
+text(rep(1 : 5, times = 5) + .15, rep(1 : 5, each = 5), labels = 1 : 25, col = 'red')
+```
+
+## srt
+控制图形中字符串的旋转角度
+```{r}
+plot(1 : 25, pch = 1)
+text(x = c(5, 10, 20), y = c(7, 15, 10), col = 'red', labels = c('I love R', 'I love China', '我爱中国'), srt = 30)
+```
+
+## tck, tcl
+坐标轴刻度线的高度
+```{r}
+par(mfrow = c(1, 2))
+plot(1 : 10, tck = 0.03, main = 'tck = 0.03')
+plot(1 : 10, tck = -0.3, main = 'tck = -0.03')
+```
+
+## fig
+```{r}
+x <- rnorm(1000)
+qqnorm(x)
+qqline(x, col = 'red')
+op <- par(fig = c(.02, .5, .5, .98), new = TRUE)
+hist(x, probability = TRUE, col = 'light blue', xlab = '', ylab = '', main = '', axes = FALSE)
+lines(density(x), col = 'red', lwd = 2)
+box()  ## 添加边框    
+par(op) ## 失访参数
+```
+
+
+
+
 
